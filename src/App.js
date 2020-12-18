@@ -2,20 +2,20 @@ import React, { Component } from "react";
 import axios from "axios"; // import axios for handling HTTP requests
 import "bootstrap/dist/css/bootstrap.min.css"; // import BootStrap
 import backgroundImage from "./bg.png"; // import background image
-import "./App.css";
+import "./App.css"; // import custom CSS
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playerFound: false,
-      yearFound: false,
-      id: null,
-      name: null,
-      year: null,
-      info: {},
-      teaminfo: {},
-      stats: {},
+      playerFound: false, // boolean noting whether player is found
+      yearFound: false, // boolean noting whether stat year is found
+      id: null, // player ID in API
+      name: null, // player name
+      year: null, // stat year
+      info: {}, // player information
+      teaminfo: {}, // player team information
+      stats: {}, // player year stats
     };
 
     // NBA team primary colors
@@ -86,36 +86,32 @@ class App extends Component {
     };
   }
 
+  // function obtaining the search results of current query
   handleSubmit = (event) => {
     event.preventDefault();
-    this.getPlayerId();
+    this.getPlayerId(); // search for player ID
   };
 
+  // function updating the value of player search query
   handleChange = (event) => {
+    // API needs spaces to be replaced with underscores
     const query = event.target.value.split(" ").join("_");
     if (query.length > 0) {
       this.setState({ name: query });
     }
   };
 
-  handleSubmitYear = (event) => {
-    event.preventDefault();
-    this.getStats();
-  };
-  handleChangeYear = (event) => {
-    const query = event.target.value;
-    if (query.length > 0) {
-      this.setState({ year: query });
-    }
-  };
-
+  // function obtaining player ID from name search
   getPlayerId = () => {
+    // make HTTP request to API
     axios
       .get(
         `https://www.balldontlie.io/api/v1/players?search=${this.state.name}`
       )
       .then(async (response) => {
+        // if search is successful
         if (response.data.data.length > 0) {
+          // call getInfo function with player ID
           await this.getInfo(response.data.data[0].id);
         }
       })
@@ -124,14 +120,17 @@ class App extends Component {
       });
   };
 
+  // function for obtaining random player
   getRandom = () => {
+    // make HTTP request to API for all players
     axios
       .get(`https://www.balldontlie.io/api/v1/players`)
       .then(async (response) => {
         if (response.data.data.length > 0) {
-          const totalPages = response.data.meta.total_pages;
-          // generate random page index
+          const totalPages = response.data.meta.total_pages; // number of pages of players
+          // generate random page index from 1 to totalPages
           const index = Math.floor(Math.random() * totalPages) + 1;
+          // call getRandomID function with random page index
           await this.getRandomId(index);
         }
       })
@@ -139,14 +138,18 @@ class App extends Component {
         console.log(err);
       });
   };
+
+  // helper function to getRandom that finds random player ID in page
   getRandomId = (index) => {
+    // make HTTP request to API for all players in page index
     axios
       .get(`https://www.balldontlie.io/api/v1/players?page=${index}`)
       .then(async (response) => {
         if (response.data.data.length > 0) {
-          const numEntries = response.data.data.length;
-          // generate random player
+          const numEntries = response.data.data.length; // number of players in page
+          // generate random player index
           const playerIndex = Math.floor(Math.random() * numEntries);
+          // call getInfo function with player ID
           await this.getInfo(response.data.data[playerIndex].id);
         }
       })
@@ -155,30 +158,48 @@ class App extends Component {
       });
   };
 
+  // function for obtaining player information
   getInfo = (playerId) => {
+    // make HTTP request to API for player with input ID
     axios
       .get(`https://www.balldontlie.io/api/v1/players/${playerId}`)
       .then(async (response) => {
-        this.setState({ id: playerId });
-        this.setState({ playerFound: true });
-        this.setState({ yearFound: false });
-        this.setState({ info: response.data });
-        this.setState({ teaminfo: response.data.team });
+        this.setState({ id: playerId }); // populate id field
+        this.setState({ playerFound: true }); // mark as player found
+        this.setState({ yearFound: false }); // mark as year not yet found
+        this.setState({ info: response.data }); // populate info field
+        this.setState({ teaminfo: response.data.team }); // populate teaminfo field
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  // function obtaining the year stats of current query
+  handleSubmitYear = (event) => {
+    event.preventDefault();
+    this.getStats(); // search for year in the player's stats
+  };
+
+  // function updating the value of year query
+  handleChangeYear = (event) => {
+    const query = event.target.value;
+    if (query.length > 0) {
+      this.setState({ year: query });
+    }
+  };
+
+  // function obtaining player's year stats
   getStats = () => {
+    // make HTTP request to API with year and player ID (already populated)
     axios
       .get(
         `https://www.balldontlie.io/api/v1/season_averages?season=${this.state.year}&player_ids[]=${this.state.id}`
       )
       .then(async (response) => {
         if (response.data.data.length > 0) {
-          this.setState({ stats: response.data.data[0] });
-          this.setState({ yearFound: true });
+          this.setState({ stats: response.data.data[0] }); // populate stats field
+          this.setState({ yearFound: true }); // mark year as found
         }
       })
       .catch((err) => {
@@ -186,7 +207,24 @@ class App extends Component {
       });
   };
 
+  // render loop
   render() {
+    // welcome blurb
+    const welcome = (
+      <div>
+        <div className="credits">
+          <div className="col-sm">
+            Welcome to NBA Nerd! Search for your favorite NBA players in history
+            or discover random players you never knew existed. Find that
+            player's advanced stats from any valid season from 1979. 2020-21
+            season stats will be updated every 10 minutes once games begin.
+            <br /> <br />
+            Note that some players may not have positions and/or measurements
+            listed.
+          </div>
+        </div>
+      </div>
+    );
     const infoResults = (
       <div>
         <div className="card">
@@ -341,18 +379,7 @@ class App extends Component {
         </div>
       </div>
     );
-    const welcome = (
-      <div>
-        <div className="credits">
-          <div className="col-sm">
-            Welcome to NBA Stats! Search for your favorite NBA players in
-            history from the 1979 season to the current season, or discover
-            random players you never knew existed. Note that some players may
-            not have positions and/or measurements listed.
-          </div>
-        </div>
-      </div>
-    );
+
     return (
       <div className="App" style={{ background: `url(${backgroundImage})` }}>
         <div className="header">
@@ -363,7 +390,11 @@ class App extends Component {
           >
             Random Player
           </button>
-          <img className="logo" src="https://i.ibb.co/fnpxV1n/logo.jpg" />
+          <img
+            className="logo"
+            src="https://i.ibb.co/Kys5Fjw/logo.png"
+            onClick={() => window.location.reload()}
+          />
           <form className="searchbar" onSubmit={this.handleSubmit}>
             <label>
               <input

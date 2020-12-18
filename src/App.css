@@ -64,11 +64,6 @@
   overflow: hidden;
 }
 
-.lines {
-  height: 100%;
-  width: 100%;
-}
-
 .logo {
   float: center;
   max-width: 30%;
@@ -76,6 +71,7 @@
   margin-right: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .name {
@@ -88,10 +84,6 @@
   width: fit-content;
   margin: 0 auto;
   padding: 0.3em;
-}
-
-.progress {
-  width: 14em;
 }
 
 .roundedBox {
@@ -114,22 +106,6 @@
   margin-right: 3em;
   margin-top: 3em;
   margin-bottom: 1em;
-}
-
-.tableCell,
-.tableCell2 {
-  display: table-cell;
-  width: fit-content;
-  padding: 3px 10px;
-}
-
-.tableCell2 {
-  font-size: smaller;
-}
-
-.tableRow {
-  display: table-row;
-  width: fit-content;
 }
 
 .year {
