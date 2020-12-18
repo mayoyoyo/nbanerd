@@ -29,24 +29,24 @@ class App extends Component {
       GSW: "#1D428A",
       HOU: "#CE1141",
       IND: "#002D62",
-      LAC: "",
-      LAL: "",
-      MEM: "",
-      MIA: "",
-      MIL: "",
-      MIN: "",
-      NOP: "",
-      NYK: "",
-      OKC: "",
-      ORL: "",
-      PHI: "",
-      PHX: "",
-      POR: "",
-      SAC: "",
-      SAS: "",
-      TOR: "",
-      UTA: "",
-      WAS: "",
+      LAC: "#C8102E",
+      LAL: "#552583",
+      MEM: "#12173F",
+      MIA: "#000000",
+      MIL: "#00471B",
+      MIN: "#0C2340",
+      NOP: "#0C2340",
+      NYK: "#006BB6",
+      OKC: "#EF3B24",
+      ORL: "#C4CED4",
+      PHI: "#ED174C",
+      PHX: "#1D1160",
+      POR: "#000000",
+      SAC: "#63727A",
+      SAS: "#000000",
+      TOR: "#CE1141",
+      UTA: "#002B5C",
+      WAS: "#002B5C",
     };
     // NBA team secondary colors
     this.TEAM_COLORS2 = {
@@ -62,24 +62,24 @@ class App extends Component {
       GSW: "#FFC72C",
       HOU: "#C4CED4",
       IND: "#FDBB30",
-      LAC: "",
-      LAL: "",
-      MEM: "",
-      MIA: "",
-      MIL: "",
-      MIN: "",
-      NOP: "",
-      NYK: "",
-      OKC: "",
-      ORL: "",
-      PHI: "",
-      PHX: "",
-      POR: "",
-      SAC: "",
-      SAS: "",
-      TOR: "",
-      UTA: "",
-      WAS: "",
+      LAC: "#1D428A",
+      LAL: "#FDB927",
+      MEM: "#5D76A9",
+      MIA: "#98002E",
+      MIL: "#EEE1C6",
+      MIN: "#236192",
+      NOP: "#C8102E",
+      NYK: "#F58426",
+      OKC: "#007AC1",
+      ORL: "#0077C0",
+      PHI: "#006BB6",
+      PHX: "#E56020",
+      POR: "#E03A3E",
+      SAC: "#5A2D81",
+      SAS: "#C4CED4",
+      TOR: "#000000",
+      UTA: "#F9A01B",
+      WAS: "#E31837",
     };
   }
 
@@ -101,7 +101,7 @@ class App extends Component {
         `https://www.balldontlie.io/api/v1/players?search=${this.state.name}`
       )
       .then(async (response) => {
-        if (response.data.data.length === 1) {
+        if (response.data.data.length >= 1) {
           await this.getInfo(response.data.data[0].id);
           // await this.getStats(res.data.data[0].id)
         }
@@ -193,7 +193,7 @@ class App extends Component {
             <div className="row">
               <div className="col-sm">
                 <div className="roundedBox">
-                  Team: {this.state.teaminfo["full_name"]}
+                  {this.state.teaminfo["full_name"]}
                 </div>
               </div>
               <div className="col-sm">
@@ -213,9 +213,10 @@ class App extends Component {
       <div>
         <div className="credits">
           <div className="col-sm">
-            Welcome to NBA stats! Search for your favorite NBA players in
+            Welcome to NBA Stats! Search for your favorite NBA players in
             history from the 1979 season to the current season, or discover
-            random players you never knew existed.
+            random players you never knew existed. Note that some retired
+            players may not have positions or measurements listed.
           </div>
         </div>
       </div>
