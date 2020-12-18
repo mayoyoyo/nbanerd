@@ -8,8 +8,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      completed: false,
+      playerFound: false,
+      yearFound: false,
+      id: null,
       name: null,
+      year: null,
       info: {},
       teaminfo: {},
       stats: {},
@@ -95,15 +98,25 @@ class App extends Component {
     }
   };
 
+  handleSubmitYear = (event) => {
+    event.preventDefault();
+    this.getStats();
+  };
+  handleChangeYear = (event) => {
+    const query = event.target.value;
+    if (query.length > 0) {
+      this.setState({ year: query });
+    }
+  };
+
   getPlayerId = () => {
     axios
       .get(
         `https://www.balldontlie.io/api/v1/players?search=${this.state.name}`
       )
       .then(async (response) => {
-        if (response.data.data.length >= 1) {
+        if (response.data.data.length > 0) {
           await this.getInfo(response.data.data[0].id);
-          // await this.getStats(res.data.data[0].id)
         }
       })
       .catch((err) => {
@@ -146,7 +159,9 @@ class App extends Component {
     axios
       .get(`https://www.balldontlie.io/api/v1/players/${playerId}`)
       .then(async (response) => {
-        this.setState({ completed: true });
+        this.setState({ id: playerId });
+        this.setState({ playerFound: true });
+        this.setState({ yearFound: false });
         this.setState({ info: response.data });
         this.setState({ teaminfo: response.data.team });
       })
@@ -155,13 +170,16 @@ class App extends Component {
       });
   };
 
-  getStats = (playerId) => {
+  getStats = () => {
     axios
       .get(
-        `https://www.balldontlie.io/api/v1/season_averages?season=2006&player_ids[]=${playerId}`
+        `https://www.balldontlie.io/api/v1/season_averages?season=${this.state.year}&player_ids[]=${this.state.id}`
       )
       .then(async (response) => {
-        this.setState({ stats: response.data.data[0] });
+        if (response.data.data.length > 0) {
+          this.setState({ stats: response.data.data[0] });
+          this.setState({ yearFound: true });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -193,16 +211,130 @@ class App extends Component {
             <div className="row">
               <div className="col-sm">
                 <div className="roundedBox">
+                  TEAM
+                  <br />
                   {this.state.teaminfo["full_name"]}
                 </div>
               </div>
               <div className="col-sm">
                 <div className="roundedBox">
-                  Position: {this.state.info["position"]}
+                  POSITION
+                  <br />
+                  {this.state.info["position"]}
                 </div>
               </div>
               <div className="col-sm">
-                <div className="roundedBox">height</div>
+                <div className="roundedBox">
+                  HEIGHT: {this.state.info["height_feet"]}'{" "}
+                  {this.state.info["height_inches"]}"
+                  <br />
+                  WEIGHT: {this.state.info["weight_pounds"]}lb
+                </div>
+              </div>
+            </div>
+          </div>
+          <form className="year" onSubmit={this.handleSubmitYear}>
+            <label>
+              <input
+                className="form-control"
+                type="text"
+                onChange={this.handleChangeYear}
+                placeholder="Search Stats Year"
+              />
+            </label>
+          </form>
+        </div>
+      </div>
+    );
+    const yearResults = (
+      <div>
+        <div className="card">
+          <div
+            className="name"
+            style={{
+              borderColor: `${
+                this.TEAM_COLORS[this.state.teaminfo.abbreviation]
+              }`,
+            }}
+          >
+            {this.state.stats["season"]}-
+            {parseInt(this.state.stats["season"]) + 1} Statistics
+          </div>
+          <div
+            className="container"
+            style={{
+              backgroundColor: `${
+                this.TEAM_COLORS2[this.state.teaminfo.abbreviation]
+              }`,
+            }}
+          >
+            <div className="row">
+              <div className="col-sm">
+                <div className="roundedBox">
+                  BASIC STATS
+                  <br />
+                  <br />
+                  PPG: {this.state.stats["pts"]} points
+                  <br />
+                  APG: {this.state.stats["ast"]} assists
+                  <br />
+                  RPG: {this.state.stats["reb"]} rebounds
+                  <br />
+                  STL: {this.state.stats["stl"]} steals
+                  <br />
+                  BLK: {this.state.stats["blk"]} blocks
+                  <br />
+                  TO: {this.state.stats["turnover"]} turnovers
+                </div>
+              </div>
+              <div className="col-sm">
+                <div className="roundedBox">
+                  SHOOTING SPLITS
+                  <br />
+                  <br />
+                  FG%:{" "}
+                  {(parseFloat(this.state.stats["fg_pct"]) * 100).toFixed(1)}%
+                  <br />
+                  3PT%:{" "}
+                  {(parseFloat(this.state.stats["fg3_pct"]) * 100).toFixed(1)}%
+                  <br />
+                  FT%:{" "}
+                  {(parseFloat(this.state.stats["ft_pct"]) * 100).toFixed(1)}%
+                  <br />
+                  FG (m/a): {this.state.stats["fgm"]} /{" "}
+                  {this.state.stats["fga"]}
+                  <br />
+                  3PT (m/a): {this.state.stats["fg3m"]} /{" "}
+                  {this.state.stats["fg3a"]}
+                  <br />
+                  FT (m/a): {this.state.stats["ftm"]} /{" "}
+                  {this.state.stats["fta"]}
+                </div>
+              </div>
+              <div className="col-sm">
+                <div className="roundedBox">
+                  ADVANCED STATS
+                  <br />
+                  <br />
+                  GP: {this.state.stats["games_played"]} games
+                  <br />
+                  MPG: {this.state.stats["min"]} mins
+                  <br />
+                  PF: {this.state.stats["pf"]} fouls
+                  <br />
+                  DReb: {this.state.stats["dreb"]} def reb
+                  <br />
+                  OReb: {this.state.stats["oreb"]} off reb
+                  <br />
+                  eFG%:{" "}
+                  {(
+                    ((parseFloat(this.state.stats["fgm"]) +
+                      0.5 * parseFloat(this.state.stats["fg3m"])) /
+                      parseFloat(this.state.stats["fga"])) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </div>
               </div>
             </div>
           </div>
@@ -215,8 +347,8 @@ class App extends Component {
           <div className="col-sm">
             Welcome to NBA Stats! Search for your favorite NBA players in
             history from the 1979 season to the current season, or discover
-            random players you never knew existed. Note that some retired
-            players may not have positions or measurements listed.
+            random players you never knew existed. Note that some players may
+            not have positions and/or measurements listed.
           </div>
         </div>
       </div>
@@ -243,7 +375,8 @@ class App extends Component {
             </label>
           </form>
         </div>
-        {this.state.completed ? infoResults : welcome}
+        {this.state.playerFound ? infoResults : welcome}
+        {this.state.yearFound ? yearResults : null}
         <div className="card">
           {" "}
           <div className="credits">

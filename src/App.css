@@ -131,3 +131,9 @@
   display: table-row;
   width: fit-content;
 }
+
+.year {
+  margin: 0 auto;
+  margin-top: 2.5em;
+  background-color: #17408b;
+}
