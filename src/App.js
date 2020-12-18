@@ -21,7 +21,7 @@ class App extends Component {
     // NBA team primary colors
     this.TEAM_COLORS = {
       ATL: "#E03A3E",
-      BOS: "#007A33",
+      BOS: "#BA9653",
       BKN: "#000000",
       CHA: "#1D1160",
       CHI: "#000000",
@@ -54,7 +54,7 @@ class App extends Component {
     // NBA team secondary colors
     this.TEAM_COLORS2 = {
       ATL: "#C1D32F",
-      BOS: "#BA9653",
+      BOS: "#007A33",
       BKN: "#C6CFD4",
       CHA: "#00788C",
       CHI: "#CE1141",
