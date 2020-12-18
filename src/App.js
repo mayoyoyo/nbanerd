@@ -15,25 +15,71 @@ class App extends Component {
       stats: {},
     };
 
-    this.TYPE_COLORS = {
-      GSW: "#a8a878",
-      LAL: "#c03028",
-      flying: "#a890f0",
-      poison: "#a040a0",
-      ground: "#e0c069",
-      rock: "#b8a039",
-      bug: "#a8b920",
-      ghost: "#705899",
-      steel: "#b8b8d0",
-      fire: "#f08031",
-      water: "#6890f0",
-      grass: "#78c850",
-      electric: "#f8d030",
-      psychic: "#f95888",
-      ice: "#98d8d8",
-      dragon: "#7138f8",
-      dark: "#715849",
-      fairy: "#ee99ad",
+    // NBA team primary colors
+    this.TEAM_COLORS = {
+      ATL: "#E03A3E",
+      BOS: "#007A33",
+      BKN: "#000000",
+      CHA: "#1D1160",
+      CHI: "#000000",
+      CLE: "#860038",
+      DAL: "#00538C",
+      DEN: "#1D428A",
+      DET: "#C8102E",
+      GSW: "#1D428A",
+      HOU: "#CE1141",
+      IND: "#002D62",
+      LAC: "",
+      LAL: "",
+      MEM: "",
+      MIA: "",
+      MIL: "",
+      MIN: "",
+      NOP: "",
+      NYK: "",
+      OKC: "",
+      ORL: "",
+      PHI: "",
+      PHX: "",
+      POR: "",
+      SAC: "",
+      SAS: "",
+      TOR: "",
+      UTA: "",
+      WAS: "",
+    };
+    // NBA team secondary colors
+    this.TEAM_COLORS2 = {
+      ATL: "#C1D32F",
+      BOS: "#BA9653",
+      BKN: "#C6CFD4",
+      CHA: "#00788C",
+      CHI: "#CE1141",
+      CLE: "#FDBB30",
+      DAL: "#B8C4CA",
+      DEN: "#FEC524",
+      DET: "#1D42BA",
+      GSW: "#FFC72C",
+      HOU: "#C4CED4",
+      IND: "#FDBB30",
+      LAC: "",
+      LAL: "",
+      MEM: "",
+      MIA: "",
+      MIL: "",
+      MIN: "",
+      NOP: "",
+      NYK: "",
+      OKC: "",
+      ORL: "",
+      PHI: "",
+      PHX: "",
+      POR: "",
+      SAC: "",
+      SAS: "",
+      TOR: "",
+      UTA: "",
+      WAS: "",
     };
   }
 
@@ -65,7 +111,7 @@ class App extends Component {
       });
   };
 
-  getRandomPage = () => {
+  getRandom = () => {
     axios
       .get(`https://www.balldontlie.io/api/v1/players`)
       .then(async (response) => {
@@ -130,17 +176,48 @@ class App extends Component {
             className="name"
             style={{
               borderColor: `${
-                this.TYPE_COLORS[this.state.teaminfo.abbreviation]
+                this.TEAM_COLORS[this.state.teaminfo.abbreviation]
               }`,
             }}
           >
             {this.state.info.first_name} {this.state.info.last_name}
           </div>
+          <div
+            className="container"
+            style={{
+              backgroundColor: `${
+                this.TEAM_COLORS2[this.state.teaminfo.abbreviation]
+              }`,
+            }}
+          >
+            <div className="row">
+              <div className="col-sm">
+                <div className="roundedBox">
+                  Team: {this.state.teaminfo["full_name"]}
+                </div>
+              </div>
+              <div className="col-sm">
+                <div className="roundedBox">
+                  Position: {this.state.info["position"]}
+                </div>
+              </div>
+              <div className="col-sm">
+                <div className="roundedBox">height</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <br />
-        Position: {this.state.info["position"]}
-        <br />
-        Team: {this.state.teaminfo["full_name"]}
+      </div>
+    );
+    const welcome = (
+      <div>
+        <div className="credits">
+          <div className="col-sm">
+            Welcome to NBA stats! Search for your favorite NBA players in
+            history from the 1979 season to the current season, or discover
+            random players you never knew existed.
+          </div>
+        </div>
       </div>
     );
     return (
@@ -149,7 +226,7 @@ class App extends Component {
           <button
             type="button"
             className="btn-primary"
-            onClick={this.getRandomId}
+            onClick={this.getRandom}
           >
             Random Player
           </button>
@@ -165,7 +242,7 @@ class App extends Component {
             </label>
           </form>
         </div>
-        {this.state.completed ? infoResults : null}
+        {this.state.completed ? infoResults : welcome}
         <div className="card">
           {" "}
           <div className="credits">
