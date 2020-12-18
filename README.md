@@ -2,9 +2,9 @@
 
 ---
 
-Retro-themed Pokédex for finding Pokémon stats, type, abilities, and more.
+NBA stat finding application
 
-Published on https://mayoyoyo.github.io/pokedex/
+Published on https://mayoyoyo.github.io/nbastats/
 
 ---
 
