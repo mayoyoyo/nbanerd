@@ -4,7 +4,7 @@
 
 NBA stat finding application
 
-Published on https://mayoyoyo.github.io/nbastats/
+Published on https://mayoyoyo.github.io/nbanerd/
 
 ---
 
