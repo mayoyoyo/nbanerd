@@ -57,7 +57,7 @@
 }
 
 .header {
-  background-color: whitesmoke;
+  background-color: white;
   overflow: hidden;
 }
 
@@ -68,7 +68,7 @@
 
 .logo {
   float: center;
-  max-width: 80%;
+  max-width: 30%;
   margin-left: 40px;
   margin-right: 40px;
   margin-top: 10px;

@@ -65,6 +65,37 @@ class App extends Component {
       });
   };
 
+  getRandomPage = () => {
+    axios
+      .get(`https://www.balldontlie.io/api/v1/players`)
+      .then(async (response) => {
+        if (response.data.data.length > 0) {
+          const totalPages = response.data.meta.total_pages;
+          // generate random page index
+          const index = Math.floor(Math.random() * totalPages) + 1;
+          await this.getRandomId(index);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  getRandomId = (index) => {
+    axios
+      .get(`https://www.balldontlie.io/api/v1/players?page=${index}`)
+      .then(async (response) => {
+        if (response.data.data.length > 0) {
+          const numEntries = response.data.data.length;
+          // generate random player
+          const playerIndex = Math.floor(Math.random() * numEntries);
+          await this.getInfo(response.data.data[playerIndex].id);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   getInfo = (playerId) => {
     axios
       .get(`https://www.balldontlie.io/api/v1/players/${playerId}`)
@@ -115,7 +146,14 @@ class App extends Component {
     return (
       <div className="App" style={{ background: `url(${backgroundImage})` }}>
         <div className="header">
-          <img className="logo" src="https://i.ibb.co/Vq98tN8/logo.png" />
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={this.getRandomId}
+          >
+            Random Player
+          </button>
+          <img className="logo" src="https://i.ibb.co/fnpxV1n/logo.jpg" />
           <form className="searchbar" onSubmit={this.handleSubmit}>
             <label>
               <input
