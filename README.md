@@ -22,7 +22,7 @@ Local development instructions:
    "eject": "react-scripts eject"
    ```
 4. Delete (if present) `node_modules` folder and any `-lock` files.
-5. `npm install`
+5. `npm `
 6. ` npm start`
 
 ---
