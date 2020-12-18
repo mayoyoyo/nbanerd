@@ -209,7 +209,7 @@ class App extends Component {
 
   // render loop
   render() {
-    // welcome blurb
+    // welcome blurb and user guide
     const welcome = (
       <div>
         <div className="credits">
@@ -225,12 +225,15 @@ class App extends Component {
         </div>
       </div>
     );
+
+    // player info card
     const infoResults = (
       <div>
         <div className="card">
           <div
             className="name"
             style={{
+              // set border color to team primary color
               borderColor: `${
                 this.TEAM_COLORS[this.state.teaminfo.abbreviation]
               }`,
@@ -242,6 +245,7 @@ class App extends Component {
             className="container"
             style={{
               backgroundColor: `${
+                // fill card color to team secondary color
                 this.TEAM_COLORS2[this.state.teaminfo.abbreviation]
               }`,
             }}
@@ -284,6 +288,7 @@ class App extends Component {
         </div>
       </div>
     );
+    // stats card
     const yearResults = (
       <div>
         <div className="card">
@@ -291,6 +296,7 @@ class App extends Component {
             className="name"
             style={{
               borderColor: `${
+                // set border color to team primary color
                 this.TEAM_COLORS[this.state.teaminfo.abbreviation]
               }`,
             }}
@@ -302,6 +308,7 @@ class App extends Component {
             className="container"
             style={{
               backgroundColor: `${
+                // fill card color to team secondary color
                 this.TEAM_COLORS2[this.state.teaminfo.abbreviation]
               }`,
             }}
@@ -365,12 +372,15 @@ class App extends Component {
                   OReb: {this.state.stats["oreb"]} off reb
                   <br />
                   eFG%:{" "}
-                  {(
-                    ((parseFloat(this.state.stats["fgm"]) +
-                      0.5 * parseFloat(this.state.stats["fg3m"])) /
-                      parseFloat(this.state.stats["fga"])) *
-                    100
-                  ).toFixed(1)}
+                  {
+                    // calculate effective field goal percentage
+                    (
+                      ((parseFloat(this.state.stats["fgm"]) +
+                        0.5 * parseFloat(this.state.stats["fg3m"])) /
+                        parseFloat(this.state.stats["fga"])) *
+                      100
+                    ).toFixed(1)
+                  }
                   %
                 </div>
               </div>
@@ -393,6 +403,7 @@ class App extends Component {
           <img
             className="logo"
             src="https://i.ibb.co/Kys5Fjw/logo.png"
+            // logo redirects to homepage when clicked
             onClick={() => window.location.reload()}
           />
           <form className="searchbar" onSubmit={this.handleSubmit}>
@@ -406,10 +417,20 @@ class App extends Component {
             </label>
           </form>
         </div>
-        {this.state.playerFound ? infoResults : welcome}
-        {this.state.yearFound ? yearResults : null}
+        {
+          // if player is found, display infoResults instead of welcome
+          this.state.playerFound ? infoResults : welcome
+        }
+        {
+          // if stats are found, display yearResults (displaynothing if not)
+          this.state.yearFound ? yearResults : null
+        }
+
         <div className="card">
-          {" "}
+          {
+            // credits box
+            " "
+          }
           <div className="credits">
             <div className="col-sm">Developed by Hanson Kang </div>
             <div className="col-sm">
